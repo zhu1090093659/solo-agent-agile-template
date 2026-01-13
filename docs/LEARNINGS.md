@@ -23,19 +23,6 @@ This document captures lessons learned during development. Review this before st
 
 ---
 
-### [Date]: [Topic]
-
-**What happened**:
-[Description]
-
-**What we learned**:
-[Takeaway]
-
-**Action taken**:
-[Change made]
-
----
-
 ## Process Learnings
 
 ### [Date]: [Topic]
@@ -81,7 +68,6 @@ This document captures lessons learned during development. Review this before st
 
 **Timeline**:
 - [Time]: [Event]
-- [Time]: [Event]
 
 **Root Cause**:
 [What caused the incident]
@@ -90,8 +76,7 @@ This document captures lessons learned during development. Review this before st
 [How it was fixed]
 
 **Action Items**:
-- [ ] [Preventive measure 1]
-- [ ] [Preventive measure 2]
+- [ ] [Preventive measure]
 
 ---
 
@@ -105,16 +90,6 @@ Things we've found to be effective:
 
 ---
 
-## Anti-Patterns Discovered
-
-Things we've learned to avoid (see also ANTI_PATTERNS.md):
-
-| Anti-Pattern | Problem Caused | Alternative |
-|--------------|----------------|-------------|
-| [Pattern] | [What went wrong] | [Better approach] |
-
----
-
 ## Third-Party Integration Lessons
 
 ### [Service Name]
@@ -122,16 +97,13 @@ Things we've learned to avoid (see also ANTI_PATTERNS.md):
 **Integration date**: [Date]
 
 **Challenges encountered**:
-- [Challenge 1]
-- [Challenge 2]
+- [Challenge]
 
 **Solutions**:
-- [Solution 1]
-- [Solution 2]
+- [Solution]
 
 **Tips for future**:
-- [Tip 1]
-- [Tip 2]
+- [Tip]
 
 ---
 
@@ -144,8 +116,3 @@ When adding a new learning:
 3. Explain what was learned
 4. Document any actions taken
 5. Link to related resources
-
-Good learnings help future development by:
-- Preventing repeated mistakes
-- Sharing knowledge
-- Building institutional memory
