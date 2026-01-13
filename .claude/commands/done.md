@@ -1,8 +1,22 @@
 ---
-description: Mark current task as complete and update all status documents
+description: Mark task complete (supports --log and --doc options)
 ---
 
-Task completion requested. I will now update all relevant documentation.
+Mark current task as complete and update status documents.
+
+## Arguments
+
+Parse $ARGUMENTS for:
+- Main content: Task completion description
+- `--log "notes"`: Also record session notes to Epic/notes.md
+- `--doc`: Also update relevant docs/ based on task type
+
+Examples:
+- `/project:done "Completed user auth API"`
+- `/project:done "Added caching layer" --log "Redis works better than memcached"`
+- `/project:done "Refactored database module" --doc`
+
+---
 
 ## Pre-Completion Checklist
 
@@ -10,28 +24,37 @@ Before marking complete, please confirm:
 
 - [ ] Code changes are committed
 - [ ] Tests pass (if applicable)
-- [ ] Documentation updated (if applicable)
 
-$ARGUMENTS
+---
 
-## Updates to Make
+## Required Updates (Always)
 
 ### 1. STATUS.md
 
-Update the following sections:
-- Move current task from "In Progress" to "What's Done This Session"
-- Update the progress bar/percentage
-- Set the next task as "Current Focus" (or clear if session ending)
-- Add any new blockers or questions discovered
+- Move current task to "What's Done This Session"
+- Update progress bar/percentage
+- Set next task as "Current Focus" (or clear if session ending)
 - Update "Last Updated" timestamp
 
 ### 2. Epic tasks.md
 
 - Change task status from WIP to DONE
 - Fill in "Actual" time column
-- Add any notes about the completion
+- Add completion notes if any
 
-### 3. Epic notes.md
+### 3. ROADMAP.md (if Epic completed)
+
+If this was the last task in an Epic:
+- Update Epic status from WIP to DONE
+- Update overall release progress
+
+---
+
+## Optional: --log (Session Notes)
+
+If $ARGUMENTS contains `--log`:
+
+### Update Epic notes.md
 
 Add a session entry:
 ```
@@ -41,120 +64,54 @@ Add a session entry:
 - [x] [Task that was just completed]
 
 **Notes**:
-- [Any learnings or observations]
+- [Extract notes from --log argument]
 
 **Next**:
 - [ ] [What should be done next]
 ```
 
-### 4. .claude/MEMORY.md (if needed)
+### Update .claude/MEMORY.md (if important)
 
-Add any new persistent knowledge:
-- Project quirks discovered
-- Important decisions made
-- Things to remember for future sessions
-
-### 5. ROADMAP.md (if Epic completed)
-
-If this was the last task in an Epic:
-- Update Epic status from WIP to DONE
-- Update overall release progress
+Add persistent knowledge if discovered:
+- Project quirks
+- Important decisions
+- Things to remember
 
 ---
 
-## 6. docs/ Updates (NEW - Auto-Update)
+## Optional: --doc (Documentation Update)
 
-Based on the completed task, update the relevant documentation in `docs/`. Follow these rules:
+If $ARGUMENTS contains `--doc`:
 
-### Update Rules by Task Type
+Based on the completed task type, suggest and update relevant docs:
 
-| If task involves... | Update this doc | What to add |
-|---------------------|-----------------|-------------|
-| New/modified API endpoint | `docs/API.md` | Endpoint spec, request/response format |
-| Architecture change | `docs/ARCHITECTURE.md` | Component, flow, or diagram update |
-| New module interface | `docs/INTERFACES.md` | Contract definition, event type |
-| New business concept | `docs/DOMAIN.md` | Term definition, business rule |
-| Solved tricky issue | `docs/TROUBLESHOOTING.md` | Issue, symptoms, solution |
-| Env config change | `docs/SETUP.md` | New variable, dependency |
-| Deploy process change | `docs/DEPLOY.md` | Step update, new requirement |
-| Code convention update | `docs/CONVENTIONS.md` | New convention, example |
-| Design pattern applied | `docs/PATTERNS.md` | Pattern usage, context |
-| Test strategy change | `docs/TESTING.md` | New approach, fixture |
-| Database migration | `docs/MIGRATION_LOG.md` | Migration entry |
-| Important lesson | `docs/LEARNINGS.md` | Learning entry |
-| Significant decision | `docs/decisions/NNN-xxx.md` | New ADR file |
+| Task Type | Update Doc | What to Add |
+|-----------|------------|-------------|
+| API endpoint | `docs/interfaces/API.md` | Endpoint spec |
+| Architecture | `docs/architecture/OVERVIEW.md` | Component update |
+| New module | `docs/architecture/MODULES.md` | Module description |
+| Tricky issue | `docs/operations/TROUBLESHOOTING.md` | Issue & solution |
+| Config change | `docs/operations/SETUP.md` | New variable |
+| Important decision | `docs/decisions/NNN-xxx.md` | New ADR |
 
-### Update Format
-
-When updating docs, follow these principles:
-
-1. **简明扼要** - Keep updates brief and focused
-   - One-liner for simple additions
-   - Short paragraph for complex changes
-   
-2. **标准格式** - Follow existing document structure
-   - Use the same heading levels
-   - Match table formats
-   - Follow code block conventions
-
-3. **关联任务** - Reference the task
-   ```
-   <!-- Added: Epic XX, Task YY - [Date] -->
-   ```
-
-4. **时间戳** - Include date for traceability
-
-### Example Updates
-
-**API.md** - New endpoint:
+Update format:
 ```markdown
-### POST /chat/admin/clear-cache
-
-Clear agent cache. [Admin only]
-
-**Response**: `200 OK`
-```json
-{"status": "ok", "cleared": 15}
-```
-<!-- Added: Epic 02, Task 03 - 2024-01-15 -->
-```
-
-**TROUBLESHOOTING.md** - New issue:
-```markdown
-#### Issue: Session timeout during long operations
-
-**Symptoms**: SSE connection drops after 60s
-
-**Solution**: Increase nginx proxy_read_timeout
-```nginx
-proxy_read_timeout 300s;
-```
-<!-- Added: Epic 02, Task 05 - 2024-01-15 -->
-```
-
-**LEARNINGS.md** - New learning:
-```markdown
-### 2024-01-15: SSE and Nginx Buffering
-
-**What happened**: SSE responses were buffered
-
-**What we learned**: Need `proxy_buffering off` for SSE
-
-**Action taken**: Updated nginx.conf template
+<!-- Added: Epic XX, Task YY - [Date] -->
+[Content]
 ```
 
 ---
 
-## Summary
+## Summary Output
 
-After updates:
+After all updates:
 
 **Completed**: [Task description]
 **Time Taken**: [Actual vs Estimated]
 **Epic Progress**: [X/Y tasks complete]
-**Docs Updated**: [List of docs touched]
+**Docs Updated**: [List of docs touched, or "None"]
 **Next Up**: [Next task or "End of session"]
 
 ---
 
-Documentation has been updated.
+$ARGUMENTS

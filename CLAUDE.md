@@ -28,12 +28,35 @@ make install          # Install dependencies
 make dev              # Start frontend + backend
 make dev-frontend     # Frontend only (port 3000)
 make dev-backend      # Backend only (port 8000)
+```
 
-# Claude Code (in project)
-/project:context      # Load current work context
-/project:next         # Get next task
-/project:done "msg"   # Mark task complete
-/project:prompt       # Work on agent prompts
+### Core Commands (Daily Use)
+
+```bash
+/project:context              # Load full work context
+/project:context standup      # Standup report format
+/project:context brief        # Quick status only
+
+/project:next                 # Get next task recommendation
+
+/project:done "completed X"           # Mark task complete
+/project:done "X" --log "notes"       # + record session notes
+/project:done "X" --doc               # + update docs
+
+/project:plan "feature"               # Task breakdown
+/project:plan "question" --design     # Architecture design
+/project:plan "feature" --full        # Design + tasks
+```
+
+### Auxiliary Commands (As Needed)
+
+```bash
+/project:init "description"           # Initialize new project
+/project:init epic "Epic name"        # Create new Epic only
+
+/project:debug "issue"                # Systematic debugging
+/project:review                       # Code review
+/project:module [name]                # Load module context
 ```
 
 ## Project Structure
@@ -110,8 +133,12 @@ curl -X POST http://localhost:8000/api/chat/admin/reload-prompt
 /project:init [describe your agent]
 
 # For EXISTING projects - load current context
-/project:context
+/project:context              # Full context
+/project:context brief        # Quick status
 
 # See what to do next
 /project:next
+
+# After completing a task
+/project:done "what you completed"
 ```

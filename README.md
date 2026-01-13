@@ -150,13 +150,244 @@ const reader = response.body.getReader();
 
 ## Claude Commands
 
+### Core Commands (Daily Use)
+
 | Command | Description |
 |---------|-------------|
-| `/project:init` | Initialize project based on requirements |
-| `/project:context` | Load current work context |
+| `/project:context` | Load full work context |
+| `/project:context standup` | Generate standup report (Yesterday/Today/Blockers) |
+| `/project:context brief` | Quick status check |
 | `/project:next` | Get next recommended task |
 | `/project:done "msg"` | Mark task complete |
-| `/project:prompt` | Work on agent prompts |
+| `/project:done "msg" --log "notes"` | Mark complete + record session notes |
+| `/project:done "msg" --doc` | Mark complete + update related docs |
+| `/project:plan "feature"` | Break down feature into tasks |
+| `/project:plan "question" --design` | Architecture design perspective |
+| `/project:plan "feature" --full` | Full analysis (design + tasks) |
+
+### Auxiliary Commands (As Needed)
+
+| Command | Description |
+|---------|-------------|
+| `/project:init "description"` | Initialize new project |
+| `/project:init epic "name"` | Create new Epic |
+| `/project:debug "issue"` | Systematic debugging help |
+| `/project:review` | Code review current changes |
+| `/project:module [name]` | Load specific module context |
+
+---
+
+## From Zero to Production: Complete Workflow Example
+
+This section demonstrates how to build a project from scratch using the template commands.
+
+### Phase 1: Project Initialization
+
+```bash
+# Step 1: Clone template and enter directory
+git clone [template-url] my-habit-tracker
+cd my-habit-tracker
+
+# Step 2: Use Claude/cursor to initialize project
+/project:init I want to build a habit tracking app called HabitFlow.
+Target users are individuals who want to build good habits.
+Core features: habit creation, daily check-ins, streak tracking, weekly summary.
+Need user authentication. Launch in 2 months.
+```
+
+Claude/cursor will:
+- Ask clarifying questions if needed
+- **Design system architecture** in `docs/ARCHITECTURE.md`
+- Update `CLAUDE.md` with project context
+- Create `ROADMAP.md` with MVP plan
+- Design domain model in `docs/DOMAIN.md`
+- Initialize `STATUS.md`
+- Create first Epic in `epics/01-xxx/`
+
+### Phase 2: Daily Development Cycle
+
+```bash
+# Start of each session - load context
+/project:context
+
+# Output example:
+# ## Current Context
+# **Epic**: 01 - User Authentication
+# **Task**: Implement JWT token generation
+# **Last Session**: Set up user model and database schema
+# **Blockers**: None
+#
+# ## Ready to Continue
+# Next step: Create auth service with login/register endpoints
+
+# Get specific task recommendation
+/project:next
+
+# Output example:
+# ### Next Task
+# **Epic**: 01 - User Authentication
+# **Task ID**: 1.3
+# **Task**: Implement JWT token generation
+# **Estimated Time**: 2h
+# **Priority**: This unblocks frontend login
+#
+# ### Getting Started
+# 1. Create backend/src/modules/auth/service.py
+# 2. Add JWT dependencies to requirements.txt
+# 3. Implement generate_token() and verify_token()
+```
+
+### Phase 3: Completing Tasks
+
+```bash
+# After finishing a task - basic completion
+/project:done "Implemented JWT auth service with login/register"
+
+# With session notes (recommended for complex tasks)
+/project:done "Implemented JWT auth" --log "Used PyJWT library, tokens expire in 24h. 
+Remember: refresh token logic still needed for Phase 2"
+
+# With documentation update (for API changes, architecture decisions)
+/project:done "Added /auth/login endpoint" --doc
+```
+
+### Phase 4: Planning New Features
+
+```bash
+# When you have a new feature idea - get task breakdown
+/project:plan "Add streak tracking - users should see their current streak 
+and get notifications when about to break it"
+
+# Output example:
+# ## Task Breakdown
+#
+# ### Phase 1: Backend Foundation
+# | Task | Est. | Dependencies |
+# |------|------|--------------|
+# | 1.1 Create streak model | 2h | None |
+# | 1.2 Add streak calculation service | 3h | 1.1 |
+#
+# ### Phase 2: API & Frontend
+# | Task | Est. | Dependencies |
+# |------|------|--------------|
+# | 2.1 Create streak API endpoints | 2h | Phase 1 |
+# | 2.2 Add streak UI component | 3h | 2.1 |
+
+# For complex features - get architecture design first
+/project:plan "How should I implement the notification system?" --design
+
+# For complete analysis (design + tasks)
+/project:plan "Payment integration for premium features" --full
+```
+
+### Phase 5: Creating New Epics
+
+```bash
+# After planning, create a new Epic
+/project:init epic "Streak Tracking System"
+
+# Claude will:
+# - Create epics/02-streak-tracking/
+# - Generate EPIC.md with goals and stories
+# - Create tasks.md from your plan
+# - Update ROADMAP.md
+```
+
+### Phase 6: Standup & Progress Tracking
+
+```bash
+# Generate standup report for team sync
+/project:context standup
+
+# Output example:
+# ## Standup Report
+#
+# ### Yesterday/Last Session
+# - Completed JWT auth service
+# - Added login/register endpoints
+# - Fixed token expiration bug
+#
+# ### Today/This Session
+# - [ ] Add password reset flow
+# - [ ] Create auth middleware
+#
+# ### Blockers
+# - Waiting for email service credentials
+#
+# ---
+# ### Progress Overview
+# **Current Epic**: 01 - User Authentication
+# [########--] 80% (8/10 tasks)
+#
+# **Target Date**: 2024-03-15 | **On Track**: Yes
+```
+
+### Phase 7: Debugging Issues
+
+```bash
+# When you encounter a bug
+/project:debug "Login returns 401 even with correct credentials"
+
+# Claude will guide you through:
+# 1. Understanding expected vs actual behavior
+# 2. Common causes checklist
+# 3. Isolation steps
+# 4. Debug commands to run
+# 5. Solution and test verification
+```
+
+### Phase 8: Code Review
+
+```bash
+# Before committing - review changes
+/project:review
+
+# Claude will check:
+# - Code standards and conventions
+# - Patterns and anti-patterns
+# - Test coverage
+# - Security considerations
+# - Performance concerns
+```
+
+---
+
+### Complete Day-in-the-Life Example
+
+```bash
+# Morning - Start work
+/project:context brief
+# Quick Status: Epic 01 (80%), Task: Add password reset, Status: Ready
+
+# Load full context
+/project:context
+# ... review what was done and what's next
+
+# Get task details
+/project:next
+# Task 1.8: Implement password reset flow
+
+# ... work on the task ...
+
+# Lunch break - mark progress
+/project:done "Added password reset email sending" --log "Used SendGrid API, 
+rate limited to 100/hour. Token expires in 1 hour."
+
+# Afternoon - continue
+/project:next
+# Task 1.9: Add password reset UI
+
+# ... complete the task ...
+
+# End of day - final update
+/project:done "Completed password reset flow" --doc
+
+# Check overall progress
+/project:context standup
+# Ready for tomorrow's standup!
+```
+
+---
 
 ## Development Workflow
 

@@ -1,29 +1,49 @@
 ---
-description: Break down a feature request into executable tasks
+description: Plan feature tasks (supports --design and --full modes)
 ---
 
-You are acting as a project manager. Please break down the following feature request into actionable tasks.
+Break down a feature request into actionable tasks, with optional architecture design.
 
-Feature Request: $ARGUMENTS
+## Arguments
 
-## Analysis Process
+Parse $ARGUMENTS for:
+- Main content: Feature/problem description
+- `--design`: Architecture design perspective (no task breakdown)
+- `--full`: Complete analysis (design + task breakdown)
+
+Examples:
+- `/project:plan "Add user authentication"` → Task breakdown only
+- `/project:plan "How to add caching?" --design` → Architecture design only
+- `/project:plan "Payment integration" --full` → Design + tasks
+
+---
+
+## Step 1: Check Existing Context
+
+- Read @docs/architecture/OVERVIEW.md for system context
+- Read @docs/architecture/MODULES.md for module structure
+- Check if similar features exist
+
+---
+
+## Step 2: Output Based on Mode
+
+### Default Mode (Task Breakdown)
+
+If $ARGUMENTS does NOT contain `--design`:
+
+#### Analysis
 
 1. **Understand the Request**
    - What is the core functionality needed?
    - Who is the user/beneficiary?
    - What are the acceptance criteria?
 
-2. **Check Existing Context**
-   - Read @docs/architecture/OVERVIEW.md for system context
-   - Read @docs/architecture/MODULES.md for module structure
-   - Check if similar features exist
-
-3. **Identify Scope**
+2. **Identify Scope**
    - What modules are affected?
    - What new components are needed?
-   - What integrations are required?
 
-## Task Breakdown
+#### Task Breakdown
 
 ### Phase 1: [Phase Name] (Foundation)
 
@@ -52,35 +72,95 @@ Feature Request: $ARGUMENTS
 
 **Phase 3 Deliverable**: [Complete feature]
 
----
-
-## Summary
+#### Summary
 
 | Metric | Value |
 |--------|-------|
 | Total Tasks | [N] |
 | Total Estimated Time | [Xh] |
-| Recommended Sessions | [N] |
 | Risk Level | [Low/Medium/High] |
 
-## Technical Considerations
+#### Next Steps
 
-### Architecture Impact
-- [How this affects the system]
-
-### Potential Risks
-- [Risk 1]: [Mitigation]
-- [Risk 2]: [Mitigation]
-
-### Open Questions
-- [Question that needs answering before starting]
+1. Create Epic: `epics/NN-[feature-name]/`
+2. Copy tasks to `tasks.md`
+3. Update ROADMAP.md
+4. Begin with Task 1.1
 
 ---
 
-## Next Steps
+### Design Mode (--design)
 
-1. Review and adjust estimates
-2. Create Epic folder: `epics/NN-[feature-name]/`
-3. Copy task breakdown to `tasks.md`
-4. Update ROADMAP.md with new Epic
-5. Begin with Task 1.1
+If $ARGUMENTS contains `--design`:
+
+Act as a Software Architect. Provide design guidance WITHOUT writing code.
+
+#### 1. Problem Understanding
+
+[Restate the problem and clarify requirements]
+
+#### 2. Current State
+
+Reference existing architecture. How does this fit?
+
+#### 3. Proposed Design
+
+```
+[ASCII diagram of proposed solution]
+```
+
+**Components**:
+
+| Component | Responsibility | Interface |
+|-----------|---------------|-----------|
+| [Component] | [What it does] | [How to interact] |
+
+**Data Flow**:
+```
+[Input] -> [Step 1] -> [Step 2] -> [Output]
+```
+
+#### 4. Module Impact
+
+| Module | Change Type | Complexity |
+|--------|-------------|------------|
+| [Module] | [New/Modify/None] | [Low/Med/High] |
+
+#### 5. Interface Design
+
+```
+Service: [Name]
+  - method1(input) -> output
+  - method2(input) -> output
+```
+
+#### 6. Trade-offs
+
+| Option | Pros | Cons |
+|--------|------|------|
+| [Option A] | [Pros] | [Cons] |
+| [Option B] | [Pros] | [Cons] |
+
+**Recommendation**: [Which option and why]
+
+#### 7. Risks
+
+| Risk | Probability | Mitigation |
+|------|-------------|------------|
+| [Risk] | [H/M/L] | [How to handle] |
+
+---
+
+### Full Mode (--full)
+
+If $ARGUMENTS contains `--full`:
+
+Output BOTH sections:
+1. First, the Design Mode output (architecture analysis)
+2. Then, the Default Mode output (task breakdown)
+
+This provides a complete picture: design decisions followed by actionable tasks.
+
+---
+
+$ARGUMENTS

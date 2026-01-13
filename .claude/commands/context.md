@@ -1,10 +1,15 @@
 ---
-description: Load current work context for this session
+description: Load current work context (supports standup/brief modes)
 ---
 
-Please load the current development context by reading these files in order:
+Load the current development context. Supports multiple output modes via $ARGUMENTS:
+- `standup` → Standup report format (Yesterday/Today/Blockers)
+- `brief` → Quick status only
+- (empty) → Full context (default)
 
-1. First, read @STATUS.md to understand:
+## Step 1: Read Context Files
+
+1. Read @STATUS.md to understand:
    - What task is currently in progress
    - What was completed in the last session
    - Any blockers or open questions
@@ -15,13 +20,15 @@ Please load the current development context by reading these files in order:
    - The Epic's tasks.md for specific task status
    - The Epic's notes.md for any recent learnings
 
-3. If the current task involves a specific module, read:
-   - src/modules/[module]/MODULE.md for module overview
-   - src/modules/[module]/INTERFACE.md if working on interfaces
+3. Read @ROADMAP.md for overall release progress
 
-4. Check @.claude/MEMORY.md for any persistent notes from previous sessions
+4. Check @.claude/MEMORY.md for persistent notes (if exists)
 
-After reading, provide a brief summary:
+---
+
+## Step 2: Output Based on Mode
+
+### If $ARGUMENTS is empty or not "standup"/"brief" → Full Mode
 
 ## Current Context
 
@@ -41,3 +48,53 @@ After reading, provide a brief summary:
 ---
 
 I am now ready for your instructions.
+
+---
+
+### If $ARGUMENTS contains "standup" → Standup Mode
+
+## Standup Report
+
+### Yesterday/Last Session
+
+- [Completed item 1 from STATUS.md]
+- [Completed item 2]
+
+### Today/This Session
+
+- [ ] [Planned item 1 from Next Up]
+- [ ] [Planned item 2]
+
+### Blockers
+
+[List any blockers, or "None"]
+
+---
+
+### Progress Overview
+
+**Current Epic**: [Name] - [##########----------] XX% (X/Y tasks)
+
+**Release Progress**:
+```
+Epic 1: [##########] 100% DONE
+Epic 2: [########--]  80% IN PROGRESS
+Epic 3: [----------]   0% TODO
+```
+
+**Target Date**: [From ROADMAP.md] | **On Track**: [Yes/No/At Risk]
+
+---
+
+### If $ARGUMENTS contains "brief" → Brief Mode
+
+## Quick Status
+
+**Epic**: [Name] ([X]% complete)
+**Task**: [Current task]
+**Status**: [In Progress / Blocked / Ready]
+**Next**: [Immediate next action]
+
+---
+
+$ARGUMENTS
