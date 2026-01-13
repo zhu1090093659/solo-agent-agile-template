@@ -430,4 +430,4 @@ Key considerations:
 
 ## License
 
-[Your License]
+MIT License
