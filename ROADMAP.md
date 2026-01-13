@@ -17,11 +17,11 @@
 
 > Goal: [What does MVP prove/validate?]
 
-| # | Epic | Status | Priority | Est. | Notes |
-|---|------|--------|----------|------|-------|
-| 01 | [Epic Name](./epics/01-name/EPIC.md) | [TODO/WIP/DONE] | P0 | [Xd] | |
-| 02 | [Epic Name](./epics/02-name/EPIC.md) | [TODO/WIP/DONE] | P0 | [Xd] | |
-| 03 | [Epic Name](./epics/03-name/EPIC.md) | [TODO/WIP/DONE] | P1 | [Xd] | |
+| # | Epic | Status | Priority | Started | Completed | Notes |
+|---|------|--------|----------|---------|-----------|-------|
+| 01 | [Epic Name](./epics/01-name/EPIC.md) | [TODO/WIP/DONE] | P0 | [Date] | [Date] | |
+| 02 | [Epic Name](./epics/02-name/EPIC.md) | [TODO/WIP/DONE] | P0 | [Date] | [Date] | |
+| 03 | [Epic Name](./epics/03-name/EPIC.md) | [TODO/WIP/DONE] | P1 | [Date] | [Date] | |
 
 **MVP Success Criteria**:
 - [ ] [Measurable criterion 1]
@@ -33,10 +33,10 @@
 
 > Goal: [What does this version add?]
 
-| # | Epic | Status | Priority | Est. | Notes |
-|---|------|--------|----------|------|-------|
-| 04 | [Epic Name](./epics/04-name/EPIC.md) | TODO | P1 | [Xd] | |
-| 05 | [Epic Name](./epics/05-name/EPIC.md) | TODO | P2 | [Xd] | |
+| # | Epic | Status | Priority | Started | Completed | Notes |
+|---|------|--------|----------|---------|-----------|-------|
+| 04 | [Epic Name](./epics/04-name/EPIC.md) | TODO | P1 | [Date] | [Date] | |
+| 05 | [Epic Name](./epics/05-name/EPIC.md) | TODO | P2 | [Date] | [Date] | |
 
 ---
 
@@ -44,10 +44,10 @@
 
 > Goal: [What makes this production-ready?]
 
-| # | Epic | Status | Priority | Est. | Notes |
-|---|------|--------|----------|------|-------|
-| 06 | [Epic Name](./epics/06-name/EPIC.md) | TODO | P1 | [Xd] | |
-| 07 | [Epic Name](./epics/07-name/EPIC.md) | TODO | P2 | [Xd] | |
+| # | Epic | Status | Priority | Started | Completed | Notes |
+|---|------|--------|----------|---------|-----------|-------|
+| 06 | [Epic Name](./epics/06-name/EPIC.md) | TODO | P1 | [Date] | [Date] | |
+| 07 | [Epic Name](./epics/07-name/EPIC.md) | TODO | P2 | [Date] | [Date] | |
 
 ---
 

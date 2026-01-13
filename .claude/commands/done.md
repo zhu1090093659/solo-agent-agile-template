@@ -39,7 +39,7 @@ Before marking complete, please confirm:
 ### 2. Epic tasks.md
 
 - Change task status from WIP to DONE
-- Fill in "Actual" time column
+- Fill in "Completed" date column
 - Add completion notes if any
 
 ### 3. ROADMAP.md (if Epic completed)
@@ -107,7 +107,7 @@ Update format:
 After all updates:
 
 **Completed**: [Task description]
-**Time Taken**: [Actual vs Estimated]
+**Time**: [Started] ~ [Completed]
 **Epic Progress**: [X/Y tasks complete]
 **Docs Updated**: [List of docs touched, or "None"]
 **Next Up**: [Next task or "End of session"]

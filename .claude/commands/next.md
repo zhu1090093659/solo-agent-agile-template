@@ -25,7 +25,6 @@ Please analyze the current project status and recommend the next task to work on
 **Epic**: [Epic name]
 **Task ID**: [Task ID from tasks.md]
 **Task**: [Task description]
-**Estimated Time**: [From tasks.md or your estimate]
 **Priority**: [Why this is the right next task]
 
 ### Prerequisites

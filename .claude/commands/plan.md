@@ -47,28 +47,28 @@ If $ARGUMENTS does NOT contain `--design`:
 
 ### Phase 1: [Phase Name] (Foundation)
 
-| Task | Description | Est. | Dependencies |
-|------|-------------|------|--------------|
-| 1.1 | [Task] | [Xh] | None |
-| 1.2 | [Task] | [Xh] | 1.1 |
+| Task | Description | Dependencies |
+|------|-------------|--------------|
+| 1.1 | [Task] | None |
+| 1.2 | [Task] | 1.1 |
 
 **Phase 1 Deliverable**: [What's usable after this phase]
 
 ### Phase 2: [Phase Name] (Core)
 
-| Task | Description | Est. | Dependencies |
-|------|-------------|------|--------------|
-| 2.1 | [Task] | [Xh] | Phase 1 |
-| 2.2 | [Task] | [Xh] | 2.1 |
+| Task | Description | Dependencies |
+|------|-------------|--------------|
+| 2.1 | [Task] | Phase 1 |
+| 2.2 | [Task] | 2.1 |
 
 **Phase 2 Deliverable**: [What's usable after this phase]
 
 ### Phase 3: [Phase Name] (Polish)
 
-| Task | Description | Est. | Dependencies |
-|------|-------------|------|--------------|
-| 3.1 | [Task] | [Xh] | Phase 2 |
-| 3.2 | [Task] | [Xh] | 3.1 |
+| Task | Description | Dependencies |
+|------|-------------|--------------|
+| 3.1 | [Task] | Phase 2 |
+| 3.2 | [Task] | 3.1 |
 
 **Phase 3 Deliverable**: [Complete feature]
 
@@ -77,7 +77,6 @@ If $ARGUMENTS does NOT contain `--design`:
 | Metric | Value |
 |--------|-------|
 | Total Tasks | [N] |
-| Total Estimated Time | [Xh] |
 | Risk Level | [Low/Medium/High] |
 
 #### Next Steps

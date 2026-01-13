@@ -6,7 +6,8 @@
 **Status**: [TODO | WIP | DONE | BLOCKED]
 **Priority**: [P0 | P1 | P2]
 **Target Release**: [Version]
-**Estimated Effort**: [X days/weeks]
+**Started**: [Date]
+**Completed**: [Date]
 
 ---
 

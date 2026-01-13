@@ -228,7 +228,6 @@ Claude/cursor will:
 # **Epic**: 01 - User Authentication
 # **Task ID**: 1.3
 # **Task**: Implement JWT token generation
-# **Estimated Time**: 2h
 # **Priority**: This unblocks frontend login
 #
 # ### Getting Started
@@ -262,16 +261,16 @@ and get notifications when about to break it"
 # ## Task Breakdown
 #
 # ### Phase 1: Backend Foundation
-# | Task | Est. | Dependencies |
-# |------|------|--------------|
-# | 1.1 Create streak model | 2h | None |
-# | 1.2 Add streak calculation service | 3h | 1.1 |
+# | Task | Dependencies |
+# |------|--------------|
+# | 1.1 Create streak model | None |
+# | 1.2 Add streak calculation service | 1.1 |
 #
 # ### Phase 2: API & Frontend
-# | Task | Est. | Dependencies |
-# |------|------|--------------|
-# | 2.1 Create streak API endpoints | 2h | Phase 1 |
-# | 2.2 Add streak UI component | 3h | 2.1 |
+# | Task | Dependencies |
+# |------|--------------|
+# | 2.1 Create streak API endpoints | Phase 1 |
+# | 2.2 Add streak UI component | 2.1 |
 
 # For complex features - get architecture design first
 /project:plan "How should I implement the notification system?" --design

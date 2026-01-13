@@ -44,7 +44,7 @@ Create `epics/NN-[epic-name]/` with:
 **ID**: [NN]
 **Status**: TODO
 **Priority**: [P0/P1/P2]
-**Estimated Effort**: [X days]
+**Started**: [Date]
 
 ## Goal
 
@@ -78,9 +78,9 @@ Create `epics/NN-[epic-name]/` with:
 
 ## Phase 1: [Phase Name]
 
-| ID | Task | Status | Est. | Notes |
-|----|------|--------|------|-------|
-| 1.1 | [Task] | TODO | [Xh] | |
+| ID | Task | Status | Started | Completed | Notes |
+|----|------|--------|---------|-----------|-------|
+| 1.1 | [Task] | TODO | [Date] | [Date] | |
 ```
 
 **notes.md**:
@@ -108,7 +108,7 @@ Add new Epic to the release plan table.
 
 **Epic**: [NN] - [Name]
 **Location**: epics/NN-[name]/
-**Tasks**: [N] tasks estimated
+**Tasks**: [N] tasks
 
 Next: Use `/project:next` to start working on this epic.
 ```
@@ -272,7 +272,6 @@ Initialize with:
 ## Important Notes
 
 - Always confirm with user before making changes
-- Create realistic task estimates
 - Break features into small, achievable epics
 - Focus on getting to a working MVP quickly
 

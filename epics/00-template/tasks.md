@@ -17,11 +17,11 @@
 **Goal**: [What this phase accomplishes]
 **Status**: [TODO | WIP | DONE]
 
-| ID | Task | Status | Est. | Actual | Assignee | Notes |
-|----|------|--------|------|--------|----------|-------|
-| 1.1 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
-| 1.2 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
-| 1.3 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
+| ID | Task | Status | Started | Completed | Assignee | Notes |
+|----|------|--------|---------|-----------|----------|-------|
+| 1.1 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
+| 1.2 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
+| 1.3 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
 
 **Phase 1 Notes**:
 - [Any notes about this phase]
@@ -34,10 +34,10 @@
 **Status**: [TODO | WIP | DONE]
 **Depends on**: Phase 1
 
-| ID | Task | Status | Est. | Actual | Assignee | Notes |
-|----|------|--------|------|--------|----------|-------|
-| 2.1 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
-| 2.2 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
+| ID | Task | Status | Started | Completed | Assignee | Notes |
+|----|------|--------|---------|-----------|----------|-------|
+| 2.1 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
+| 2.2 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
 
 **Phase 2 Notes**:
 - [Any notes about this phase]
@@ -50,10 +50,10 @@
 **Status**: [TODO | WIP | DONE]
 **Depends on**: Phase 2
 
-| ID | Task | Status | Est. | Actual | Assignee | Notes |
-|----|------|--------|------|--------|----------|-------|
-| 3.1 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
-| 3.2 | [Task description] | [TODO/WIP/DONE] | [Xh] | [Xh] | [Name] | |
+| ID | Task | Status | Started | Completed | Assignee | Notes |
+|----|------|--------|---------|-----------|----------|-------|
+| 3.1 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
+| 3.2 | [Task description] | [TODO/WIP/DONE] | [Date] | [Date] | [Name] | |
 
 ---
 
@@ -67,9 +67,9 @@
 
 ## Completed Tasks Log
 
-| Task ID | Completed | Duration | Notes |
-|---------|-----------|----------|-------|
-| 1.1 | [Date] | [Xh] | [Any learnings] |
+| Task ID | Started | Completed | Notes |
+|---------|---------|-----------|-------|
+| 1.1 | [Date] | [Date] | [Any learnings] |
 
 ---
 
@@ -82,18 +82,6 @@
 | DONE | Completed and verified |
 | BLOCKED | Waiting on dependency |
 | SKIP | Decided not to do |
-
----
-
-## Estimation Guidelines
-
-| Estimate | Meaning |
-|----------|---------|
-| 1h | Trivial change, well understood |
-| 2h | Small task, some complexity |
-| 4h | Half day, moderate complexity |
-| 8h | Full day, significant work |
-| 16h+ | Consider breaking down further |
 
 ---
 
