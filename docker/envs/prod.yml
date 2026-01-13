@@ -1,0 +1,31 @@
+# Production Environment Configuration
+# Optimized for performance and security
+
+services:
+  frontend:
+    build:
+      target: prod
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=/api
+    restart: unless-stopped
+
+  backend:
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=production
+      - DEBUG=false
+      - DATABASE_URL=postgresql+asyncpg://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      - SECRET_KEY=${SECRET_KEY}
+      - CORS_ORIGINS=${CORS_ORIGINS:-["https://yourdomain.com"]}
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 4
+    restart: unless-stopped
+
+  db:
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    restart: unless-stopped

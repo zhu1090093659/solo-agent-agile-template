@@ -1,0 +1,9 @@
+# Base Docker Compose Configuration
+# Defines shared networks and volumes for all services
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:

@@ -1,61 +1,63 @@
 # Current Development Status
 
-> Last Updated: [DATE] by Claude Session #[SESSION_ID]
+> Last Updated: 2026-01-13 by Claude Session
 
 ## Current Focus
 
-**Epic**: [Epic Name and Link]
-**Task**: [Current Task Description]
-**Branch**: `[branch-name]`
-**Started**: [Date]
+**Epic**: Infrastructure Setup
+**Task**: Docker 配置重构 - 前后端分离 + 多环境支持
+**Branch**: `main`
+**Started**: 2026-01-13
 
 ### What's Done This Session
 
-- [x] [Completed item 1]
-- [x] [Completed item 2]
-- [ ] [WIP] [Currently working on]
+- [x] 创建 `docker/` 目录结构，分离服务配置
+- [x] 创建 `docker/docker-compose.yml` 基础配置（networks, volumes）
+- [x] 创建 `docker/docker-compose.frontend.yml` 前端服务配置
+- [x] 创建 `docker/docker-compose.backend.yml` 后端服务配置
+- [x] 创建 `docker/docker-compose.db.yml` 数据库服务配置
+- [x] 创建 `docker/envs/dev.yml` 开发环境配置
+- [x] 创建 `docker/envs/staging.yml` 预发布环境配置
+- [x] 创建 `docker/envs/prod.yml` 生产环境配置
+- [x] 更新根目录 `docker-compose.yml` 作为快捷入口
+- [x] 创建 `scripts/docker-*.sh` 和 `scripts/docker-*.ps1` 启动脚本
 
 ### Blockers / Questions
 
-- [?] [Open question that needs decision]
-- [!] [Blocker that needs resolution]
+- None
 
 ### Next Up
 
-1. [Next immediate task]
-2. [Following task]
-3. [Task after that]
+1. 测试 Docker 多环境配置是否正常工作
+2. 根据需要调整环境变量配置
+3. 继续开发其他功能
 
 ---
 
 ## Overall Progress
 
-### Current Release: [VERSION]
+### Current Release: v0.1
 
 ```
-[VERSION] Progress: [##--------] XX%
+v0.1 Progress: [##--------] 20%
 
-Epic 01 - [Name]:     [##########] 100% [DONE]
-Epic 02 - [Name]:     [########--]  80% [IN PROGRESS] <- YOU ARE HERE
-Epic 03 - [Name]:     [----------]   0% [TODO]
+Epic 01 - Infrastructure:     [##########] 100% [DONE]
+Epic 02 - Core Features:      [----------]   0% [TODO]
 ```
 
 ### Milestone Summary
 
 | Milestone | Target Date | Status | Notes |
 |-----------|-------------|--------|-------|
-| v0.1 MVP | [Date] | [Status] | |
-| v0.2 Beta | [Date] | [Status] | |
-| v1.0 Release | [Date] | [Status] | |
+| v0.1 MVP | TBD | In Progress | |
 
 ---
 
 ## Quick Links
 
-- Current Epic Details: @epics/[current-epic]/EPIC.md
-- Current Module: @src/modules/[module]/MODULE.md
-- Related ADR: @docs/decisions/[NNN-title].md
-- Relevant Code: `src/[path]`
+- Docker Config: `docker/`
+- Scripts: `scripts/`
+- Backend Config: `backend/src/config/settings.py`
 
 ---
 
@@ -63,16 +65,13 @@ Epic 03 - [Name]:     [----------]   0% [TODO]
 
 | Date | Decision | Reference |
 |------|----------|-----------|
-| [Date] | [Brief description] | @docs/decisions/[NNN].md |
+| 2026-01-13 | Docker 配置改用 YAML 分离式结构，支持 dev/staging/prod 多环境 | - |
 
 ---
 
 ## Session History
 
-### [Date] - Session #[N]
-- Completed: [summary]
-- Issues found: [if any]
-- Next session should: [recommendation]
-
-### [Previous Date] - Session #[N-1]
-- Completed: [summary]
+### 2026-01-13 - Session #1
+- Completed: Docker 配置重构 - 前后端分离 + 多环境支持
+- Issues found: None
+- Next session should: 测试 Docker 配置，继续开发核心功能

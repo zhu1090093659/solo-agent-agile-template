@@ -44,7 +44,7 @@ class Settings(BaseSettings):
     claude_model: str = "sonnet"  # sonnet, opus, haiku
     
     # Agent workspace (where Claude SDK runs)
-    agent_workspace_dir: str = "/tmp/agent_workspaces"
+    agent_workspace_dir: str = "./AgentWorkspace"
     agent_max_turns: int = 10
     agent_timeout: int = 300  # 5 minutes
     

@@ -1,0 +1,30 @@
+# Staging Environment Configuration
+# Production-like settings with debug info for testing
+
+services:
+  frontend:
+    build:
+      target: prod
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+
+  backend:
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_ENV=staging
+      - DEBUG=false
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/app
+      - SECRET_KEY=${SECRET_KEY:-staging-secret-key}
+      - CORS_ORIGINS=["http://localhost:3000"]
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --workers 2
+
+  db:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: app

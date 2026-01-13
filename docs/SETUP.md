@@ -264,13 +264,71 @@ curl http://localhost:8000/health
 
 ## Docker Development (Alternative)
 
+### Quick Start (Development)
+
 ```bash
-# Build and start all services
-docker-compose up --build
+# Build and start all services (development mode)
+docker compose up --build
 
 # Run commands in container
-docker-compose exec backend make test
+docker compose exec backend make test
 ```
+
+### Multi-Environment Docker Setup
+
+The project uses modular Docker Compose configuration with environment-specific overrides:
+
+```
+docker/
+├── docker-compose.yml           # Base config (networks, volumes)
+├── docker-compose.frontend.yml  # Frontend service
+├── docker-compose.backend.yml   # Backend service
+├── docker-compose.db.yml        # Database service
+└── envs/
+    ├── dev.yml                  # Development environment
+    ├── staging.yml              # Staging environment
+    └── prod.yml                 # Production environment
+```
+
+### Using Environment Scripts
+
+**Windows (PowerShell)**:
+```powershell
+.\scripts\docker-dev.ps1 up       # Start development
+.\scripts\docker-dev.ps1 down     # Stop
+.\scripts\docker-dev.ps1 build    # Rebuild images
+.\scripts\docker-dev.ps1 logs     # View logs
+
+.\scripts\docker-staging.ps1 up   # Start staging
+.\scripts\docker-prod.ps1 up      # Start production
+```
+
+**Linux/macOS/Git Bash**:
+```bash
+./scripts/docker-dev.sh up        # Start development
+./scripts/docker-staging.sh up    # Start staging
+./scripts/docker-prod.sh up       # Start production
+```
+
+### Manual Compose (Advanced)
+
+```bash
+# Development
+docker compose -f docker/docker-compose.yml \
+  -f docker/docker-compose.frontend.yml \
+  -f docker/docker-compose.backend.yml \
+  -f docker/docker-compose.db.yml \
+  -f docker/envs/dev.yml up
+
+# Production (requires env vars: SECRET_KEY, DB_USER, DB_PASSWORD, DB_NAME)
+docker compose -f docker/docker-compose.yml \
+  -f docker/docker-compose.frontend.yml \
+  -f docker/docker-compose.backend.yml \
+  -f docker/docker-compose.db.yml \
+  -f docker/envs/prod.yml up -d
+```
+
+<!-- Added: Docker multi-env config - 2026-01-13 -->
 
 ---
 

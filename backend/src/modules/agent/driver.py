@@ -47,7 +47,8 @@ class ClaudeSDKDriver:
     
     def __init__(self, config: Optional[ClaudeSDKConfig] = None):
         self.config = config or ClaudeSDKConfig()
-        self.base_workspace = Path(settings.AGENT_WORKSPACE_DIR)
+        # Use resolve() to convert relative path to absolute path
+        self.base_workspace = Path(settings.AGENT_WORKSPACE_DIR).resolve()
         self.base_workspace.mkdir(parents=True, exist_ok=True)
         # Store active clients for session continuity
         self._clients: dict[str, ClaudeSDKClient] = {}

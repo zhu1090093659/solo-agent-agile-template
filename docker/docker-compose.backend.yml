@@ -1,0 +1,13 @@
+# Backend Service Configuration
+# FastAPI with Python
+
+services:
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network

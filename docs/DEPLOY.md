@@ -45,13 +45,34 @@ make deploy-prod
 
 ### Method 1: Docker (Recommended)
 
+**Using scripts (easiest)**:
 ```bash
-# Build images
-docker-compose -f docker-compose.prod.yml build
+# Windows PowerShell
+.\scripts\docker-prod.ps1 build   # Build images
+.\scripts\docker-prod.ps1 up      # Deploy
 
-# Deploy
-docker-compose -f docker-compose.prod.yml up -d
+# Linux/macOS/Git Bash
+./scripts/docker-prod.sh build
+./scripts/docker-prod.sh up
 ```
+
+**Using compose directly**:
+```bash
+# Set required environment variables first
+export SECRET_KEY="your-secure-secret-key"
+export DB_USER="postgres"
+export DB_PASSWORD="secure-password"
+export DB_NAME="app"
+
+# Build and deploy
+docker compose -f docker/docker-compose.yml \
+  -f docker/docker-compose.frontend.yml \
+  -f docker/docker-compose.backend.yml \
+  -f docker/docker-compose.db.yml \
+  -f docker/envs/prod.yml up -d --build
+```
+
+<!-- Updated: Docker multi-env deploy - 2026-01-13 -->
 
 ### Method 2: Manual Deploy
 

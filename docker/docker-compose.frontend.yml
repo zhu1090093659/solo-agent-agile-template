@@ -1,0 +1,13 @@
+# Frontend Service Configuration
+# React + Vite with Bun
+
+services:
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+      target: dev
+    depends_on:
+      - backend
+    networks:
+      - app-network

@@ -1,4 +1,29 @@
-version: '3.8'
+# Quick Start Docker Compose
+# This file provides a convenient default configuration for development
+#
+# Usage:
+#   docker compose up              # Start all services (development mode)
+#   docker compose up -d           # Start in background
+#   docker compose down            # Stop all services
+#
+# For more control, use the modular configs in docker/ directory:
+#   docker compose -f docker/docker-compose.yml \
+#     -f docker/docker-compose.frontend.yml \
+#     -f docker/docker-compose.backend.yml \
+#     -f docker/docker-compose.db.yml \
+#     -f docker/envs/dev.yml up
+#
+# Or use the provided scripts:
+#   ./scripts/docker-dev.sh        # Development environment
+#   ./scripts/docker-staging.sh    # Staging environment
+#   ./scripts/docker-prod.sh       # Production environment
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
 
 services:
   # Frontend (React + Vite)
@@ -6,6 +31,7 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      target: dev
     ports:
       - "3000:3000"
     environment:
@@ -16,6 +42,8 @@ services:
     depends_on:
       - backend
     command: bun run dev --host
+    networks:
+      - app-network
 
   # Backend (FastAPI)
   backend:
@@ -25,9 +53,10 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/app
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key}
+      - APP_ENV=development
       - DEBUG=true
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/app
+      - SECRET_KEY=dev-secret-key-change-in-production
       - CORS_ORIGINS=["http://localhost:3000"]
     volumes:
       - ./backend/src:/app/src
@@ -35,6 +64,8 @@ services:
       db:
         condition: service_healthy
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - app-network
 
   # Database (PostgreSQL)
   db:
@@ -52,15 +83,5 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-
-  # Redis (optional - uncomment if needed)
-  # redis:
-  #   image: redis:7-alpine
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-
-volumes:
-  postgres_data:
-  # redis_data:
+    networks:
+      - app-network
