@@ -43,7 +43,7 @@ async def create_session() -> SessionResponse:
 @router.delete("/sessions/{session_id}")
 async def delete_session(session_id: str):
     """End and cleanup a chat session."""
-    agent_service.end_session(session_id)
+    await agent_service.end_session(session_id)
     return {"status": "ok"}
 
 

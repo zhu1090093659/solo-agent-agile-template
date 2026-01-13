@@ -1,46 +1,56 @@
 """
-Claude Code Driver
+Claude Agent SDK Driver
 
-Drives the agent using Claude Code CLI as the underlying engine.
-This allows leveraging Claude Code's agentic capabilities:
+Drives the agent using Claude Python Agent SDK as the underlying engine.
+This allows leveraging Claude's agentic capabilities:
 - Code execution
 - File operations
 - Tool use
 - Multi-turn conversations
 """
 
-import asyncio
-import subprocess
-import json
-import os
 from typing import AsyncIterator, Optional
 from pathlib import Path
 from dataclasses import dataclass
+
+from claude_agent_sdk import (
+    ClaudeSDKClient,
+    ClaudeAgentOptions,
+    AssistantMessage,
+    ResultMessage,
+    TextBlock,
+    ToolUseBlock,
+    ToolResultBlock,
+)
+
 from ..config.settings import settings
 
 
 @dataclass
-class ClaudeCodeConfig:
-    """Configuration for Claude Code."""
-    model: str = "sonnet"  # or "opus", "haiku"
-    max_turns: int = 10
-    timeout: int = 300  # 5 minutes
+class ClaudeSDKConfig:
+    """Configuration for Claude SDK."""
+    model: str = settings.claude_model
+    max_turns: int = settings.agent_max_turns
+    timeout: int = settings.agent_timeout
     workspace: Optional[Path] = None
     system_prompt_file: Optional[Path] = None
+    permission_mode: str = settings.agent_permission_mode
 
 
-class ClaudeCodeDriver:
+class ClaudeSDKDriver:
     """
-    Driver for Claude Code CLI.
+    Driver for Claude Agent SDK.
     
-    Executes claude commands and streams output back.
+    Executes queries and streams output back.
     Each session runs in an isolated workspace.
     """
     
-    def __init__(self, config: Optional[ClaudeCodeConfig] = None):
-        self.config = config or ClaudeCodeConfig()
+    def __init__(self, config: Optional[ClaudeSDKConfig] = None):
+        self.config = config or ClaudeSDKConfig()
         self.base_workspace = Path(settings.AGENT_WORKSPACE_DIR)
         self.base_workspace.mkdir(parents=True, exist_ok=True)
+        # Store active clients for session continuity
+        self._clients: dict[str, ClaudeSDKClient] = {}
     
     def _get_session_workspace(self, session_id: str) -> Path:
         """Get or create workspace directory for a session."""
@@ -48,49 +58,75 @@ class ClaudeCodeDriver:
         workspace.mkdir(parents=True, exist_ok=True)
         return workspace
     
-    def _build_command(
+    def _build_options(
         self,
-        message: str,
         session_id: str,
         system_prompt: Optional[str] = None,
-        continue_conversation: bool = False,
         allowed_tools: Optional[list[str]] = None,
-    ) -> list[str]:
-        """Build the claude CLI command."""
-        cmd = ["claude"]
+    ) -> ClaudeAgentOptions:
+        """Build ClaudeAgentOptions for the query."""
+        workspace = self._get_session_workspace(session_id)
         
-        # Add message
-        cmd.extend(["--print", message])
+        return ClaudeAgentOptions(
+            system_prompt=system_prompt,
+            allowed_tools=allowed_tools or [],
+            permission_mode=self.config.permission_mode,
+            max_turns=self.config.max_turns,
+            model=self.config.model,
+            cwd=str(workspace),
+        )
+    
+    def _map_message(self, message) -> list[dict]:
+        """Map SDK message to our event format."""
+        events = []
         
-        # Model selection
-        if self.config.model:
-            cmd.extend(["--model", self.config.model])
+        if isinstance(message, AssistantMessage):
+            for block in message.content:
+                if isinstance(block, TextBlock):
+                    events.append({
+                        "type": "text",
+                        "content": block.text
+                    })
+                elif isinstance(block, ToolUseBlock):
+                    events.append({
+                        "type": "tool_use",
+                        "tool": block.name,
+                        "input": block.input
+                    })
+                elif isinstance(block, ToolResultBlock):
+                    # Extract content from tool result
+                    content = block.content
+                    if isinstance(content, list):
+                        # Handle list of content blocks
+                        output = ""
+                        for item in content:
+                            if isinstance(item, dict) and "text" in item:
+                                output += item["text"]
+                            elif isinstance(item, str):
+                                output += item
+                    elif isinstance(content, str):
+                        output = content
+                    else:
+                        output = str(content) if content else ""
+                    
+                    events.append({
+                        "type": "tool_result",
+                        "tool_use_id": block.tool_use_id,
+                        "output": output,
+                        "is_error": block.is_error or False
+                    })
         
-        # Max turns for agentic behavior
-        cmd.extend(["--max-turns", str(self.config.max_turns)])
+        elif isinstance(message, ResultMessage):
+            events.append({
+                "type": "done",
+                "session_id": message.session_id,
+                "duration_ms": message.duration_ms,
+                "is_error": message.is_error,
+                "usage": message.usage,
+                "total_cost_usd": message.total_cost_usd,
+            })
         
-        # Output format - JSON for structured parsing
-        cmd.extend(["--output-format", "stream-json"])
-        
-        # System prompt
-        if system_prompt:
-            cmd.extend(["--system-prompt", system_prompt])
-        elif self.config.system_prompt_file:
-            cmd.extend(["--system-prompt-file", str(self.config.system_prompt_file)])
-        
-        # Continue previous conversation
-        if continue_conversation:
-            cmd.append("--continue")
-        
-        # Allowed tools (if restricted)
-        if allowed_tools:
-            for tool in allowed_tools:
-                cmd.extend(["--allowedTools", tool])
-        
-        # Disable interactive prompts
-        cmd.append("--no-interactive")
-        
-        return cmd
+        return events
     
     async def execute(
         self,
@@ -101,7 +137,7 @@ class ClaudeCodeDriver:
         allowed_tools: Optional[list[str]] = None,
     ) -> AsyncIterator[dict]:
         """
-        Execute a message through Claude Code.
+        Execute a message through Claude SDK.
         
         Args:
             message: User message
@@ -114,140 +150,47 @@ class ClaudeCodeDriver:
             Event dicts with structure:
             - {"type": "text", "content": "..."}
             - {"type": "tool_use", "tool": "...", "input": {...}}
-            - {"type": "tool_result", "tool": "...", "output": "..."}
+            - {"type": "tool_result", "tool_use_id": "...", "output": "..."}
             - {"type": "error", "message": "..."}
             - {"type": "done", "usage": {...}}
         """
-        workspace = self._get_session_workspace(session_id)
-        
-        cmd = self._build_command(
-            message=message,
-            session_id=session_id,
-            system_prompt=system_prompt,
-            continue_conversation=continue_conversation,
-            allowed_tools=allowed_tools,
-        )
-        
-        # Set up environment
-        env = os.environ.copy()
-        env["ANTHROPIC_API_KEY"] = settings.ANTHROPIC_API_KEY
-        
         try:
-            process = await asyncio.create_subprocess_exec(
-                *cmd,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE,
-                cwd=str(workspace),
-                env=env,
+            options = self._build_options(
+                session_id=session_id,
+                system_prompt=system_prompt,
+                allowed_tools=allowed_tools,
             )
             
-            # Stream stdout
-            async for line in self._read_stream(process.stdout):
-                event = self._parse_event(line)
-                if event:
+            # Check if we should continue an existing session
+            if continue_conversation and session_id in self._clients:
+                client = self._clients[session_id]
+                await client.query(message)
+            else:
+                # Create new client for this session
+                client = ClaudeSDKClient(options=options)
+                await client.connect()
+                self._clients[session_id] = client
+                await client.query(message)
+            
+            # Stream response
+            async for msg in client.receive_response():
+                events = self._map_message(msg)
+                for event in events:
                     yield event
             
-            # Wait for completion
-            await asyncio.wait_for(
-                process.wait(),
-                timeout=self.config.timeout
-            )
-            
-            # Check for errors
-            if process.returncode != 0:
-                stderr = await process.stderr.read()
-                yield {
-                    "type": "error",
-                    "message": stderr.decode() if stderr else f"Process exited with code {process.returncode}"
-                }
-            
-            yield {"type": "done"}
-            
-        except asyncio.TimeoutError:
-            yield {
-                "type": "error",
-                "message": f"Execution timed out after {self.config.timeout}s"
-            }
-        except FileNotFoundError:
-            yield {
-                "type": "error", 
-                "message": "Claude Code CLI not found. Please install: npm install -g @anthropic-ai/claude-code"
-            }
         except Exception as e:
+            error_type = type(e).__name__
             yield {
                 "type": "error",
-                "message": str(e)
+                "message": f"{error_type}: {str(e)}"
             }
-    
-    async def _read_stream(self, stream) -> AsyncIterator[str]:
-        """Read lines from async stream."""
-        while True:
-            line = await stream.readline()
-            if not line:
-                break
-            yield line.decode().strip()
-    
-    def _parse_event(self, line: str) -> Optional[dict]:
-        """Parse a JSON event from Claude Code output."""
-        if not line:
-            return None
-        
-        try:
-            data = json.loads(line)
-            
-            # Map Claude Code events to our format
-            event_type = data.get("type", "")
-            
-            if event_type == "assistant":
-                # Assistant text message
-                return {
-                    "type": "text",
-                    "content": data.get("message", "")
-                }
-            
-            elif event_type == "tool_use":
-                return {
-                    "type": "tool_use",
-                    "tool": data.get("tool", ""),
-                    "input": data.get("input", {})
-                }
-            
-            elif event_type == "tool_result":
-                return {
-                    "type": "tool_result",
-                    "tool": data.get("tool", ""),
-                    "output": data.get("output", "")
-                }
-            
-            elif event_type == "error":
-                return {
-                    "type": "error",
-                    "message": data.get("message", "Unknown error")
-                }
-            
-            elif event_type == "result":
-                return {
-                    "type": "done",
-                    "usage": data.get("usage", {})
-                }
-            
-            # For text streaming
-            elif "text" in data:
-                return {
-                    "type": "text",
-                    "content": data["text"]
-                }
-            
-            return None
-            
-        except json.JSONDecodeError:
-            # Plain text output
-            if line.strip():
-                return {
-                    "type": "text",
-                    "content": line
-                }
-            return None
+            # Cleanup on error
+            if session_id in self._clients:
+                try:
+                    await self._clients[session_id].disconnect()
+                except Exception:
+                    pass
+                del self._clients[session_id]
     
     async def execute_simple(
         self,
@@ -273,8 +216,17 @@ class ClaudeCodeDriver:
         
         return "".join(chunks)
     
-    def cleanup_session(self, session_id: str) -> None:
-        """Clean up a session's workspace."""
+    async def cleanup_session(self, session_id: str) -> None:
+        """Clean up a session's workspace and client."""
+        # Disconnect client if exists
+        if session_id in self._clients:
+            try:
+                await self._clients[session_id].disconnect()
+            except Exception:
+                pass
+            del self._clients[session_id]
+        
+        # Remove workspace
         import shutil
         workspace = self.base_workspace / session_id
         if workspace.exists():
@@ -282,4 +234,4 @@ class ClaudeCodeDriver:
 
 
 # Default driver instance
-claude_code_driver = ClaudeCodeDriver()
+claude_sdk_driver = ClaudeSDKDriver()

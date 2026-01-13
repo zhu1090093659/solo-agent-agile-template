@@ -10,11 +10,11 @@
 flowchart LR
     User([User]) --> Frontend[React Frontend]
     Frontend <--> Backend[FastAPI Backend]
-    Backend <--> CC[Claude Code CLI]
-    CC <--> Claude[Claude API]
+    Backend <--> SDK[Claude Agent SDK]
+    SDK <--> Claude[Claude API]
     Backend <--> DB[(PostgreSQL)]
     
-    style CC fill:#a855f7,color:#fff
+    style SDK fill:#a855f7,color:#fff
 ```
 
 ## High-Level Architecture
@@ -30,11 +30,11 @@ flowchart TB
     subgraph Backend["Backend (FastAPI)"]
         API[Chat API Routes]
         Service[Agent Service]
-        Driver[Claude Code Driver]
+        Driver[Claude SDK Driver]
     end
     
     subgraph Engine["Agent Engine"]
-        CLI[Claude Code CLI]
+        SDK[Claude Agent SDK]
         Workspace[Session Workspace]
     end
     
@@ -47,9 +47,9 @@ flowchart TB
     SSE <--> API
     API --> Service
     Service --> Driver
-    Driver --> CLI
-    CLI --> Workspace
-    CLI <--> Claude
+    Driver --> SDK
+    SDK --> Workspace
+    SDK <--> Claude
 ```
 
 ---
@@ -69,7 +69,7 @@ flowchart TB
 
 | Module | Location | Purpose |
 |--------|----------|---------|
-| Agent Driver | `modules/agent/driver.py` | Executes Claude Code CLI |
+| Agent Driver | `modules/agent/driver.py` | Drives Claude Agent SDK |
 | Agent Service | `modules/agent/service.py` | Manages prompts & sessions |
 | Chat Router | `modules/chat/router.py` | API endpoints |
 
@@ -97,7 +97,7 @@ flowchart TB
 | Module | Location | Responsibility | Status |
 |--------|----------|----------------|--------|
 | core | `src/modules/core` | Shared domain primitives | Stable |
-| agent | `src/modules/agent` | Claude Code integration | Stable |
+| agent | `src/modules/agent` | Claude Agent SDK integration | Stable |
 | chat | `src/modules/chat` | Chat API routes | Stable |
 
 ### Cross-Module Communication
@@ -136,16 +136,16 @@ sequenceDiagram
     participant F as Frontend
     participant B as Backend
     participant D as Driver
-    participant C as Claude Code
+    participant S as Claude SDK
     participant A as Claude API
 
     U->>F: Type message
     F->>B: POST /api/chat/message
     B->>D: execute(message, session_id)
-    D->>C: claude --print "message"
-    C->>A: API request
-    A-->>C: Stream response
-    C-->>D: JSON events
+    D->>S: client.query(message)
+    S->>A: API request
+    A-->>S: Stream response
+    S-->>D: Message objects
     D-->>B: Yield events
     B-->>F: SSE stream
     F-->>U: Display response
@@ -207,7 +207,7 @@ flowchart TD
     A[New Message] --> B{Session Exists?}
     B -->|No| C[Create Session]
     C --> D[Create Workspace]
-    D --> E[Execute Claude Code]
+    D --> E[Execute via SDK]
     B -->|Yes| E
     E --> F[Stream Response]
     F --> G{More Messages?}
@@ -233,7 +233,7 @@ Each session runs in an isolated directory:
 
 ### Tool Restrictions
 
-Control which Claude Code tools are available:
+Control which tools are available via Claude Agent SDK:
 
 ```python
 allowed_tools = [
@@ -256,7 +256,7 @@ allowed_tools = [
 
 ### Current Limits
 
-- One Claude Code process per request
+- One Claude SDK client per session
 - Workspace disk usage per session
 - API rate limits
 

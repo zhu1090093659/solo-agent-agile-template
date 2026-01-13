@@ -30,7 +30,7 @@ make deploy-prod
 - [ ] Code reviewed and approved
 - [ ] Changelog updated
 - [ ] Environment variables configured
-- [ ] Claude Code CLI available on target
+- [ ] Claude Agent SDK installed (pip install claude-agent-sdk)
 
 ### Post-Deployment
 

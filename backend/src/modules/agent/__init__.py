@@ -1,10 +1,10 @@
 """
 Agent Module
 
-Claude Code powered agent engine.
+Claude Agent SDK powered agent engine.
 """
 
 from .service import agent_service
-from .driver import claude_code_driver
+from .driver import claude_sdk_driver
 
-__all__ = ["agent_service", "claude_code_driver"]
+__all__ = ["agent_service", "claude_sdk_driver"]

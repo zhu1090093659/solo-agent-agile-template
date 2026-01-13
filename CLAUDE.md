@@ -1,12 +1,12 @@
 # Agent Project: [AGENT_NAME]
 
-> Solo Agent Agile Template - Build AI Agents powered by Claude Code
+> Solo Agent Agile Template - Build AI Agents powered by Claude Agent SDK
 
 ## Quick Context
 
 [One sentence: What does this Agent do and who is it for?]
 
-**Architecture**: React Frontend → FastAPI Backend → Claude Code CLI → Claude API
+**Architecture**: React Frontend → FastAPI Backend → Claude Agent SDK → Claude API
 
 ## Key Files
 
@@ -14,7 +14,7 @@
 |------|----------|
 | Agent System Prompt | @backend/src/modules/agent/prompts/system.md |
 | Agent Service | @backend/src/modules/agent/service.py |
-| Claude Code Driver | @backend/src/modules/agent/driver.py |
+| Claude SDK Driver | @backend/src/modules/agent/driver.py |
 | Chat API Routes | @backend/src/modules/chat/router.py |
 | Chat UI Components | @frontend/src/components/chat/ |
 | Current Status | @STATUS.md |
@@ -43,7 +43,7 @@ backend/
   src/
     modules/
       agent/                # 核心 Agent 模块
-        driver.py           # Claude Code CLI 驱动
+        driver.py           # Claude Agent SDK 驱动
         service.py          # Agent 服务层
         prompts/
           system.md         # 系统提示词 (重要!)
@@ -99,7 +99,7 @@ curl -X POST http://localhost:8000/api/chat/admin/reload-prompt
 
 ## Gotchas
 
-- Claude Code CLI must be installed: `npm install -g @anthropic-ai/claude-code`
+- Claude Agent SDK must be installed: `pip install claude-agent-sdk`
 - ANTHROPIC_API_KEY must be set in `.env`
 - Each session creates a workspace in `AGENT_WORKSPACE_DIR`
 

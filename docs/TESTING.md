@@ -93,7 +93,7 @@ def agent_service():
 
 @pytest.fixture
 def mock_driver():
-    return AsyncMock(spec=ClaudeCodeDriver)
+    return AsyncMock(spec=ClaudeSDKDriver)
 ```
 
 ### Factory Fixtures
@@ -116,7 +116,7 @@ def session_factory():
 
 ### When to Mock
 
-- External services (Claude Code CLI)
+- External services (Claude Agent SDK)
 - Time-dependent code
 - Slow operations
 

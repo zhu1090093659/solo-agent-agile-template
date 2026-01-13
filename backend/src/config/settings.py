@@ -38,15 +38,18 @@ class Settings(BaseSettings):
     cors_origins: list[str] = ["http://localhost:3000", "http://localhost:5173"]
     
     # ========================================
-    # Claude Code / Agent Configuration
+    # Claude Agent SDK Configuration
     # ========================================
     anthropic_api_key: str = ""
     claude_model: str = "sonnet"  # sonnet, opus, haiku
     
-    # Agent workspace (where Claude Code runs)
+    # Agent workspace (where Claude SDK runs)
     agent_workspace_dir: str = "/tmp/agent_workspaces"
     agent_max_turns: int = 10
     agent_timeout: int = 300  # 5 minutes
+    
+    # SDK permission mode: default, acceptEdits, bypassPermissions
+    agent_permission_mode: str = "acceptEdits"
     
     @property
     def is_production(self) -> bool:

@@ -24,21 +24,21 @@ make logs
 
 ### Development Environment
 
-#### Issue: Claude Code CLI not found
+#### Issue: Claude Agent SDK not found
 
 **Symptoms**:
 ```
-FileNotFoundError: Claude Code CLI not found
-Error: Claude Code CLI not found. Please install: npm install -g @anthropic-ai/claude-code
+ModuleNotFoundError: No module named 'claude_agent_sdk'
+CLINotFoundError: Claude SDK not properly initialized
 ```
 
 **Solutions**:
 ```bash
-# Install Claude Code CLI
-npm install -g @anthropic-ai/claude-code
+# Install Claude Agent SDK
+pip install claude-agent-sdk
 
-# Verify installation
-claude --version
+# Or reinstall all dependencies
+pip install -r backend/requirements.txt
 ```
 
 ---
@@ -209,7 +209,7 @@ app.add_middleware(
 
 | Error Code | Meaning | Common Fix |
 |------------|---------|------------|
-| CLI_NOT_FOUND | Claude Code not installed | Install Claude Code CLI |
+| CLINotFoundError | Claude Agent SDK not properly installed | pip install claude-agent-sdk |
 | API_KEY_MISSING | No Anthropic API key | Set ANTHROPIC_API_KEY |
 | TIMEOUT | Execution took too long | Increase timeout or reduce task |
 | SESSION_NOT_FOUND | Invalid session ID | Create new session |
@@ -225,7 +225,7 @@ app.add_middleware(
 |-------------|----------|
 | Backend | Console output / `logs/` |
 | Frontend | Browser console |
-| Claude Code | Workspace directory |
+| Claude SDK | Workspace directory |
 
 ### Common Log Patterns
 
@@ -255,7 +255,7 @@ Before asking for help, collect:
 
 1. Check this troubleshooting guide
 2. Search existing issues on GitHub
-3. Check Claude Code documentation
+3. Check Claude Agent SDK documentation
 4. Create detailed issue with gathered info
 
 ---

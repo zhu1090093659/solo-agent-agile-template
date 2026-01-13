@@ -14,7 +14,6 @@
 | Node.js | 18+ | https://nodejs.org/ |
 | Bun | Latest | https://bun.sh/ |
 | Docker | 20.10+ | https://docs.docker.com/get-docker/ |
-| Claude Code CLI | Latest | `npm install -g @anthropic-ai/claude-code` |
 
 ### Recommended Tools
 
@@ -32,17 +31,14 @@
 git clone [repo-url]
 cd [project-name]
 
-# 2. Install Claude Code CLI (required!)
-npm install -g @anthropic-ai/claude-code
-
-# 3. Copy environment file
+# 2. Copy environment file
 cp backend/.env.example backend/.env
 # Edit backend/.env and add your ANTHROPIC_API_KEY
 
-# 4. Install dependencies
+# 3. Install dependencies (includes Claude Agent SDK)
 make install
 
-# 5. Start development environment
+# 4. Start development environment
 make dev
 
 # Frontend: http://localhost:3000
@@ -64,6 +60,7 @@ CLAUDE_MODEL=sonnet
 AGENT_WORKSPACE_DIR=/tmp/agent_workspaces
 AGENT_MAX_TURNS=10
 AGENT_TIMEOUT=300
+AGENT_PERMISSION_MODE=acceptEdits
 ```
 
 ### Variable Details
@@ -82,9 +79,10 @@ AGENT_TIMEOUT=300
 |----------|----------|---------|-------------|
 | `ANTHROPIC_API_KEY` | **Yes** | - | Your Anthropic API key |
 | `CLAUDE_MODEL` | No | sonnet | Model: sonnet, opus, haiku |
-| `AGENT_WORKSPACE_DIR` | No | /tmp/agent_workspaces | Where Claude Code runs |
+| `AGENT_WORKSPACE_DIR` | No | /tmp/agent_workspaces | Where Claude SDK runs |
 | `AGENT_MAX_TURNS` | No | 10 | Max agentic turns per request |
 | `AGENT_TIMEOUT` | No | 300 | Request timeout (seconds) |
+| `AGENT_PERMISSION_MODE` | No | acceptEdits | SDK permission mode: default, acceptEdits, bypassPermissions |
 
 #### Server
 
@@ -155,14 +153,14 @@ ANTHROPIC_API_KEY=your-prod-key
 
 ### External Services
 
-#### Claude Code CLI
+#### Claude Agent SDK
 
-**Package**: `@anthropic-ai/claude-code`
-**Purpose**: AI agent engine
+**Package**: `claude-agent-sdk`
+**Purpose**: AI agent engine (Python SDK)
 
-**Installation**:
+**Installation** (included in requirements.txt):
 ```bash
-npm install -g @anthropic-ai/claude-code
+pip install claude-agent-sdk
 ```
 
 **Rate limits**: Subject to Anthropic API limits
@@ -178,16 +176,7 @@ git clone [repo-url]
 cd [project-name]
 ```
 
-### Step 2: Install Claude Code CLI
-
-```bash
-npm install -g @anthropic-ai/claude-code
-
-# Verify installation
-claude --version
-```
-
-### Step 3: Environment Configuration
+### Step 2: Environment Configuration
 
 ```bash
 # Copy example environment file
@@ -197,10 +186,10 @@ cp backend/.env.example backend/.env
 # At minimum, set ANTHROPIC_API_KEY
 ```
 
-### Step 4: Install Dependencies
+### Step 3: Install Dependencies
 
 ```bash
-# Backend (Python)
+# Backend (Python) - includes Claude Agent SDK
 cd backend
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
@@ -216,7 +205,7 @@ Or use Make:
 make install
 ```
 
-### Step 5: Start Development Server
+### Step 4: Start Development Server
 
 ```bash
 make dev

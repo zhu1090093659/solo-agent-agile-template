@@ -8,9 +8,9 @@
 
 ### What We Do
 
-This is an AI Agent template powered by Claude Code. It provides a full-stack solution for building custom AI assistants with:
+This is an AI Agent template powered by Claude Agent SDK. It provides a full-stack solution for building custom AI assistants with:
 - Web chat interface
-- Claude Code CLI as the agent engine
+- Claude Agent SDK as the agent engine
 - Session and workspace management
 
 ### Target Users
@@ -42,7 +42,7 @@ Created -> Active -> Idle -> Cleanup
 
 ### Agent
 
-**Definition**: The AI assistant powered by Claude Code CLI.
+**Definition**: The AI assistant powered by Claude Agent SDK.
 
 **Components**:
 - System prompt (personality/instructions)
@@ -85,7 +85,7 @@ Created -> Active -> Idle -> Cleanup
 | Agent | The AI assistant instance | Not "bot" or "chatbot" |
 | Session | A conversation context | Not "chat" or "thread" |
 | Workspace | Isolated agent directory | Not "sandbox" |
-| Driver | Claude Code CLI wrapper | Internal component |
+| Driver | Claude Agent SDK wrapper | Internal component |
 | Prompt | System instructions | Not "template" |
 
 ### Technical Terms
@@ -93,7 +93,7 @@ Created -> Active -> Idle -> Cleanup
 | Term | Definition | Context |
 |------|------------|---------|
 | SSE | Server-Sent Events | Streaming protocol |
-| CLI | Command Line Interface | Claude Code execution |
+| SDK | Software Development Kit | Claude Agent SDK |
 | DTO | Data Transfer Object | API layer |
 
 ### Abbreviations
@@ -103,7 +103,7 @@ Created -> Active -> Idle -> Cleanup
 | API | Application Programming Interface | General |
 | SSE | Server-Sent Events | Streaming |
 | UUID | Universally Unique Identifier | IDs |
-| CLI | Command Line Interface | Execution |
+| SDK | Software Development Kit | Agent engine |
 
 ---
 
@@ -143,7 +143,7 @@ Created -> Active -> Idle -> Cleanup
 
 | Context | Allowed Tools |
 |---------|---------------|
-| Default | All Claude Code tools |
+| Default | All Claude SDK tools |
 | Restricted | Configurable subset |
 
 ---
@@ -182,7 +182,7 @@ A session contains one conversation.
 ### Agent vs Driver vs Service
 
 - **Agent**: The conceptual AI assistant
-- **Driver**: Low-level Claude Code CLI wrapper
+- **Driver**: Low-level Claude Agent SDK wrapper
 - **Service**: High-level business logic layer
 
 ---

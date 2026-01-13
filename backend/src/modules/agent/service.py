@@ -9,14 +9,15 @@ High-level agent service that manages:
 
 from typing import AsyncIterator, Optional
 from pathlib import Path
-from .driver import claude_code_driver, ClaudeCodeConfig
+
+from .driver import claude_sdk_driver, ClaudeSDKConfig
 
 
 class AgentService:
     """
     Main Agent Service.
     
-    Wraps Claude Code driver with:
+    Wraps Claude SDK driver with:
     - Prompt management
     - Session tracking
     - Tool permission control
@@ -98,11 +99,11 @@ Be concise and helpful. If you need to use tools, explain what you're doing.
         """Get session info."""
         return self._sessions.get(session_id)
     
-    def end_session(self, session_id: str) -> None:
+    async def end_session(self, session_id: str) -> None:
         """End and cleanup a session."""
         if session_id in self._sessions:
             del self._sessions[session_id]
-        claude_code_driver.cleanup_session(session_id)
+        await claude_sdk_driver.cleanup_session(session_id)
     
     async def chat(
         self,
@@ -119,7 +120,7 @@ Be concise and helpful. If you need to use tools, explain what you're doing.
             continue_conversation: Whether to continue previous context
             
         Yields:
-            Event dicts from Claude Code driver
+            Event dicts from Claude SDK driver
         """
         # Ensure session exists
         if session_id not in self._sessions:
@@ -133,7 +134,7 @@ Be concise and helpful. If you need to use tools, explain what you're doing.
             self._sessions[session_id]["message_count"] > 1
         )
         
-        async for event in claude_code_driver.execute(
+        async for event in claude_sdk_driver.execute(
             message=message,
             session_id=session_id,
             system_prompt=self.system_prompt,

@@ -1,8 +1,8 @@
 # Solo Agent Agile Template
 
-A full-stack template for building **AI Agents powered by Claude Code**.
+A full-stack template for building **AI Agents powered by Claude Agent SDK**.
 
-Create your own branded Agent ("XX Agent") with a web interface, using Claude Code as the underlying engine.
+Create your own branded Agent ("XX Agent") with a web interface, using Claude Agent SDK as the underlying engine.
 
 ## Architecture
 
@@ -10,13 +10,13 @@ Create your own branded Agent ("XX Agent") with a web interface, using Claude Co
 flowchart LR
     User([User]) --> Frontend[React Frontend]
     Frontend --> Backend[FastAPI Backend]
-    Backend --> CC[Claude Code CLI]
-    CC --> Claude[Claude API]
+    Backend --> SDK[Claude Agent SDK]
+    SDK --> Claude[Claude API]
     
-    style CC fill:#f9f,stroke:#333
+    style SDK fill:#f9f,stroke:#333
 ```
 
-**Key Insight**: Instead of calling Claude API directly, this template uses **Claude Code CLI** as the agent engine. This gives you:
+**Key Insight**: Instead of calling Claude API directly, this template uses **Claude Agent SDK** as the agent engine. This gives you:
 
 - Built-in agentic capabilities (code execution, file operations)
 - Multi-turn reasoning out of the box
@@ -27,7 +27,7 @@ flowchart LR
 
 - **Frontend**: React 18 + Vite + Tailwind CSS (managed by Bun)
 - **Backend**: FastAPI + SQLAlchemy + PostgreSQL
-- **Agent Engine**: Claude Code CLI
+- **Agent Engine**: Claude Agent SDK
 
 ## Quick Start
 
@@ -40,14 +40,11 @@ cd my-agent
 chmod +x init-project.sh
 ./init-project.sh "MyAgent"
 
-# 3. Install Claude Code CLI (required!)
-npm install -g @anthropic-ai/claude-code
-
-# 4. Set up environment
+# 3. Set up environment
 cp backend/.env.example backend/.env
 # Edit backend/.env and add your ANTHROPIC_API_KEY
 
-# 5. Install dependencies & run
+# 4. Install dependencies & run (includes Claude Agent SDK)
 make install
 make db-start
 make dev
@@ -67,13 +64,13 @@ my-agent/
 |   |   |-- hooks/
 |   |   |   |-- useChat.ts   # SSE streaming hook
 |   |   |-- pages/
-|   |       |-- HomePage.tsx # Main chat page
+|       |-- HomePage.tsx # Main chat page
 |
-|-- backend/                  # FastAPI + Claude Code
+|-- backend/                  # FastAPI + Claude Agent SDK
 |   |-- src/
 |   |   |-- modules/
 |   |   |   |-- agent/       # Agent engine
-|   |   |   |   |-- driver.py    # Claude Code driver
+|   |   |   |   |-- driver.py    # Claude SDK driver
 |   |   |   |   |-- service.py   # Agent service
 |   |   |   |   |-- prompts/     # System prompts
 |   |   |   |-- chat/        # Chat API routes
@@ -103,7 +100,7 @@ agent_service.set_allowed_tools([
     "Read",      # Read files
     "Write",     # Write files
     "Bash",      # Run commands
-    # ... see Claude Code docs for full list
+    # ... see Claude Agent SDK docs for full list
 ])
 ```
 
@@ -179,9 +176,10 @@ flowchart TD
 |----------|-------------|---------|
 | `ANTHROPIC_API_KEY` | Your Anthropic API key | (required) |
 | `CLAUDE_MODEL` | Model to use: sonnet/opus/haiku | sonnet |
-| `AGENT_WORKSPACE_DIR` | Where Claude Code runs | /tmp/agent_workspaces |
+| `AGENT_WORKSPACE_DIR` | Where Claude SDK runs | /tmp/agent_workspaces |
 | `AGENT_MAX_TURNS` | Max agentic turns | 10 |
 | `AGENT_TIMEOUT` | Request timeout (seconds) | 300 |
+| `AGENT_PERMISSION_MODE` | SDK permission mode | acceptEdits |
 
 ## Security Considerations
 
@@ -192,10 +190,10 @@ flowchart TD
 
 ## Deployment
 
-See `docs/operations/DEPLOY.md` for deployment guides.
+See `docs/DEPLOY.md` for deployment guides.
 
 Key considerations:
-- Claude Code CLI must be installed on the server
+- Claude Agent SDK must be installed (`pip install claude-agent-sdk`)
 - Ensure adequate disk space for workspaces
 - Configure cleanup for old session workspaces
 

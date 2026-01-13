@@ -191,8 +191,8 @@ Examples:
 
 #### agent.tool.executed
 
-**Trigger**: Claude Code tool execution
-**Producer**: ClaudeCodeDriver
+**Trigger**: Claude SDK tool execution
+**Producer**: ClaudeSDKDriver
 **Payload**:
 
 ```python
