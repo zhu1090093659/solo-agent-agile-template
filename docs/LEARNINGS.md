@@ -6,6 +6,32 @@ This document captures lessons learned during development. Review this before st
 
 ---
 
+## Quick Lookup Index
+
+> Fast reference for common issues. Updated by `/project:done --error`.
+
+| Keyword | Issue | Solution | Link |
+|---------|-------|----------|------|
+| | | | |
+
+---
+
+## Error Patterns
+
+> Recurring error patterns to avoid. Add here when the same mistake happens twice.
+
+### Pattern: [Pattern Name]
+
+**Symptoms**: [How to recognize this error]
+
+**Root Cause**: [Why it happens]
+
+**Prevention**: [How to avoid it]
+
+**Quick Fix**: [Fast solution when it occurs]
+
+---
+
 ## Technical Learnings
 
 ### [Date]: [Topic]

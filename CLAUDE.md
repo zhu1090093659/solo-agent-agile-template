@@ -6,7 +6,7 @@
 
 [One sentence: What does this Agent do and who is it for?]
 
-**Architecture**: React Frontend → FastAPI Backend → Claude Agent SDK → Claude API
+**Architecture**: React Frontend -> FastAPI Backend -> Claude Agent SDK -> Claude API
 
 ## Key Files
 
@@ -19,45 +19,7 @@
 | Chat UI Components | @frontend/src/components/chat/ |
 | Current Status | @STATUS.md |
 | Roadmap | @ROADMAP.md |
-
-## Commands
-
-```bash
-# Development
-make install          # Install dependencies
-make dev              # Start frontend + backend
-make dev-frontend     # Frontend only (port 3000)
-make dev-backend      # Backend only (port 8000)
-```
-
-### Core Commands (Daily Use)
-
-```bash
-/project:context              # Load full work context
-/project:context standup      # Standup report format
-/project:context brief        # Quick status only
-
-/project:next                 # Get next task recommendation
-
-/project:done "completed X"           # Mark task complete
-/project:done "X" --log "notes"       # + record session notes
-/project:done "X" --doc               # + update docs
-
-/project:plan "feature"               # Task breakdown
-/project:plan "question" --design     # Architecture design
-/project:plan "feature" --full        # Design + tasks
-```
-
-### Auxiliary Commands (As Needed)
-
-```bash
-/project:init "description"           # Initialize new project
-/project:init epic "Epic name"        # Create new Epic only
-
-/project:debug "issue"                # Systematic debugging
-/project:review                       # Code review
-/project:module [name]                # Load module context
-```
+| Learnings | @docs/LEARNINGS.md |
 
 ## Project Structure
 
@@ -65,22 +27,22 @@ make dev-backend      # Backend only (port 8000)
 backend/
   src/
     modules/
-      agent/                # 核心 Agent 模块
-        driver.py           # Claude Agent SDK 驱动
-        service.py          # Agent 服务层
+      agent/                # Core Agent module
+        driver.py           # Claude Agent SDK driver
+        service.py          # Agent service layer
         prompts/
-          system.md         # 系统提示词 (重要!)
+          system.md         # System prompt (important!)
       chat/
-        router.py           # Chat API 路由
+        router.py           # Chat API routes
 
 frontend/
   src/
     components/
-      chat/                 # 聊天 UI 组件
+      chat/                 # Chat UI components
     hooks/
-      useChat.ts            # SSE 流式 hook
+      useChat.ts            # SSE streaming hook
     pages/
-      HomePage.tsx          # 聊天界面
+      HomePage.tsx          # Chat page
 ```
 
 ## Current Focus
@@ -90,6 +52,65 @@ frontend/
 **Epic**: [Current Epic Name]
 **Task**: [Current Task]
 **Status**: [In Progress / Blocked / Done]
+
+---
+
+## Working Rules
+
+### 1. Filesystem as External Memory
+
+```
+Context Window = RAM (volatile, limited)
+Filesystem = Disk (persistent, unlimited)
+```
+
+Important information MUST be written to files, not just kept in conversation:
+- Research findings -> notes.md
+- Errors encountered -> docs/LEARNINGS.md
+- Decisions made -> notes.md or ADR
+
+### 2. 2-Action Rule
+
+After every 2 "view" operations, save findings to notes.md:
+- Read file + Search -> Save findings
+- Run tests + Check logs -> Save findings
+
+This prevents losing important discoveries.
+
+### 3. Re-read Plan Before Major Decisions
+
+Before architecture decisions or starting new phases:
+- Re-read STATUS.md to confirm current state
+- Re-read current Epic's EPIC.md to confirm goal
+- Check docs/LEARNINGS.md to avoid repeating mistakes
+
+### 4. Record All Errors
+
+When encountering errors, immediately record to docs/LEARNINGS.md:
+- Do NOT wait until "after it's fixed"
+- Include: Problem, Cause, Solution
+- Helps avoid repeating the same mistakes
+
+### 5. Active Task Tracking
+
+For medium complexity tasks (3-10 steps):
+- Create Active Task section in notes.md
+- Track phase progress and findings
+- Archive to Session Log when complete
+
+## Task Complexity Guide
+
+| Complexity | Steps | Approach |
+|------------|-------|----------|
+| Simple | <3 | Execute directly |
+| Medium | 3-10 | Create Active Task in notes.md |
+| Complex | >10 | Create full Epic |
+
+## Gotchas
+
+- Claude Agent SDK must be installed: `pip install claude-agent-sdk`
+- ANTHROPIC_API_KEY must be set in `.env`
+- Each session creates a workspace in `AGENT_WORKSPACE_DIR`
 
 ## Agent Configuration
 
@@ -107,38 +128,3 @@ agent_service.set_allowed_tools(["Read", "Write", "Bash"])
 ### Adding Personas
 
 Create: `backend/src/modules/agent/prompts/persona_[name].md`
-
-## API Quick Reference
-
-```bash
-# Send message (streaming)
-curl -N -X POST http://localhost:8000/api/chat/message \
-  -H "Content-Type: application/json" \
-  -d '{"message": "Hello!"}'
-
-# Reload prompt
-curl -X POST http://localhost:8000/api/chat/admin/reload-prompt
-```
-
-## Gotchas
-
-- Claude Agent SDK must be installed: `pip install claude-agent-sdk`
-- ANTHROPIC_API_KEY must be set in `.env`
-- Each session creates a workspace in `AGENT_WORKSPACE_DIR`
-
-## Quick Start for New Session
-
-```bash
-# For NEW projects - initialize based on requirements
-/project:init [describe your agent]
-
-# For EXISTING projects - load current context
-/project:context              # Full context
-/project:context brief        # Quick status
-
-# See what to do next
-/project:next
-
-# After completing a task
-/project:done "what you completed"
-```

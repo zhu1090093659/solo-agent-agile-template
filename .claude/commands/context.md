@@ -24,6 +24,14 @@ Load the current development context. Supports multiple output modes via $ARGUME
 
 4. Check @.claude/MEMORY.md for persistent notes (if exists)
 
+5. Check @docs/LEARNINGS.md for relevant learnings:
+   - Search for keywords related to current task/Epic
+   - If found, prepare "Relevant Learnings" section for output
+
+6. Check current Epic's notes.md for Active Task:
+   - If Active Task section exists, note its status
+   - Prepare reminder to continue or complete it
+
 ---
 
 ## Step 2: Output Based on Mode
@@ -36,6 +44,23 @@ Load the current development context. Supports multiple output modes via $ARGUME
 **Task**: [Current task being worked on]
 **Last Session**: [Brief summary of what was done]
 **Blockers**: [Any blockers, or "None"]
+
+## Active Task (if exists)
+
+> Only show this section if an Active Task was found in notes.md
+
+**Task**: [Active Task name]
+**Progress**: [Current phase]
+**Started**: [Date]
+**Action Required**: Continue working, Complete it, or Abandon?
+
+## Relevant Learnings (if found)
+
+> Only show this section if related learnings were found in LEARNINGS.md
+
+**Past Issue**: [Issue title]
+**Solution**: [Brief solution]
+**Tip**: Review this before starting similar work
 
 ## Ready to Continue
 

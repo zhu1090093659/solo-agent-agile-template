@@ -158,9 +158,12 @@ const reader = response.body.getReader();
 | `/project:context standup` | Generate standup report (Yesterday/Today/Blockers) |
 | `/project:context brief` | Quick status check |
 | `/project:next` | Get next recommended task |
+| `/project:track "task"` | Create lightweight task tracking (3-10 steps) |
 | `/project:done "msg"` | Mark task complete |
 | `/project:done "msg" --log "notes"` | Mark complete + record session notes |
 | `/project:done "msg" --doc` | Mark complete + update related docs |
+| `/project:done "msg" --findings "discoveries"` | Mark complete + save research findings |
+| `/project:done "msg" --error "issue"` | Mark complete + record error to LEARNINGS.md |
 | `/project:plan "feature"` | Break down feature into tasks |
 | `/project:plan "question" --design` | Architecture design perspective |
 | `/project:plan "feature" --full` | Full analysis (design + tasks) |
@@ -243,18 +246,44 @@ Claude/cursor will:
 /project:done "Implemented JWT auth service with login/register"
 
 # With session notes (recommended for complex tasks)
-/project:done "Implemented JWT auth" --log "Used PyJWT library, tokens expire in 24h. 
+/project:done "Implemented JWT auth" --log "Used PyJWT library, tokens expire in 24h.
 Remember: refresh token logic still needed for Phase 2"
 
 # With documentation update (for API changes, architecture decisions)
 /project:done "Added /auth/login endpoint" --doc
+
+# With research findings (save discoveries for future reference)
+/project:done "Fixed CORS issue" --findings "Need credentials:true and explicit origin"
+
+# With error recording (save to LEARNINGS.md for avoiding same mistakes)
+/project:done "Fixed database timeout" --error "Connection pool exhausted - need to increase pool size"
+
+# Combine multiple options
+/project:done "Completed caching layer" --log "Used Redis" --findings "LRU works best" --error "Memory leak with default config"
+```
+
+### Phase 3.5: Tracking Medium Tasks
+
+For tasks with 3-10 steps (too small for a full Epic, too complex for direct execution):
+
+```bash
+# Start tracking a medium complexity task
+/project:track "Implement JWT refresh token"
+
+# Claude will create an Active Task in notes.md with:
+# - Goal and phases
+# - Findings table (update every 2 operations)
+# - Errors table
+#
+# When done, use /project:done to archive it
+/project:done "Completed JWT refresh" --findings "Token rotation works best"
 ```
 
 ### Phase 4: Planning New Features
 
 ```bash
 # When you have a new feature idea - get task breakdown
-/project:plan "Add streak tracking - users should see their current streak 
+/project:plan "Add streak tracking - users should see their current streak
 and get notifications when about to break it"
 
 # Output example:

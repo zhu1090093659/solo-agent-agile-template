@@ -162,4 +162,19 @@ This provides a complete picture: design decisions followed by actionable tasks.
 
 ---
 
+## Before Implementing (Always Include)
+
+Add this checklist at the end of every plan output:
+
+### Pre-Implementation Checklist
+
+Before starting implementation:
+
+- [ ] Run `/project:context` to refresh current state
+- [ ] Check @docs/LEARNINGS.md for related past issues
+- [ ] Confirm this design aligns with original goal in EPIC.md
+- [ ] Consider creating Active Task with `/project:track` for medium complexity work
+
+---
+
 $ARGUMENTS
